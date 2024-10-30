@@ -1,49 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with
-[`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Catche
+
+Catche is a fast and anonymous file-sharing application built with modern web technologies. It allows users to share files, images, and videos with complete anonymity, without the need for sign-up or account creation.
+
+![Catche Screenshot](https://i.postimg.cc/76F8cygn/664-2x-shots-so.png)
+
+## Features
+
+-   **Anonymous File Sharing**: Share files without creating an account.
+-   **Multiple File Types Supported**: Upload images, videos, audio files, PDFs, and ZIP archives.
+-   **Built with Modern Technologies**: Next.js, TypeScript, Tailwind CSS, and more.
 
 ## Getting Started
 
-First, run the development server:
+To get a local copy up and running, follow these simple steps.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Prerequisites
+
+Ensure you have the following installed:
+
+-   Node.js
+-   npm, yarn, pnpm, or bun
+
+### Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/sf000000/catche.git
+    cd catche
+    ```
+
+2. Install dependencies:
+
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+3. Start the development server:
+
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    # or
+    pnpm dev
+    # or
+    bun dev
+    ```
+
+4. Open [http://localhost:3000](http://localhost:3000)
+
+## Usage
+
+-   Navigate to the upload page to start sharing files.
+-   Drag and drop files into the upload zone or click to select files.
+-
+
+## Environment Variables
+
+Create a `.env.local` file in the root directory and add the following environment variables:
+
+```
+AWS_REGION=your-aws-region
+AWS_BUCKET_NAME=your-s3-bucket-name
+GITHUB_TOKEN=your-github-token
+GITHUB_OWNER=your-github-username
+GITHUB_REPO=your-repo-name
+MAX_FILE_SIZE=50MB
+MAX_FILES=10
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
+## Built With
 
-You can start editing the page by modifying `app/page.tsx`. The page
-auto-updates as you edit the file.
+-   [Next.js](https://nextjs.org) - The React Framework for Production
+-   [TypeScript](https://www.typescriptlang.org) - Typed JavaScript at Any Scale
+-   [Tailwind CSS](https://tailwindcss.com) - A utility-first CSS framework
+-   [AWS S3](https://aws.amazon.com/s3/) - Scalable storage in the cloud
 
-This project uses
-[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
-to automatically optimize and load [Geist](https://vercel.com/font), a new font
-family for Vercel.
+## Contributing
 
-## Learn More
+Any contributions you make are **greatly appreciated**.
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/amazing-feature`)
+3. Commit your Changes (`git commit -m 'add some amazing-feature'`)
+4. Push to the Branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out
-[the Next.js GitHub repository](https://github.com/vercel/next.js) - your
-feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
-
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying)
-for more details.
+Distributed under the MIT License. See `LICENSE` for more information.
