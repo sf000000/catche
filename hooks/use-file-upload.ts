@@ -1,34 +1,53 @@
 import { useCallback, useState } from "react";
-import { ACCEPTED_FILE_TYPES, MAX_FILE_SIZE } from "@/common/constants";
+import { ACCEPTED_FILE_TYPES } from "@/common/constants";
 import { FileWithPreview } from "@/common/types";
 import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 
 import { uploadToS3 } from "../actions/s3-upload";
 
 export function useFileUpload() {
     const [files, setFiles] = useState<FileWithPreview[]>([]);
-    const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [uploadComplete, setUploadComplete] = useState(false);
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        setError(null);
-        setUploadComplete(false);
-        const newFiles = acceptedFiles.map((file) =>
-            Object.assign(file, {
-                preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined
-            })
-        );
-        setFiles((prev) => [...prev, ...newFiles]);
-    }, []);
+    const onDrop = useCallback(
+        (acceptedFiles: File[]) => {
+            setUploadComplete(false);
+
+            if (files.length + acceptedFiles.length > 10) {
+                toast.error("Error", {
+                    description: "Maximum 10 files allowed"
+                });
+                return;
+            }
+
+            const newFiles = acceptedFiles.map((file) =>
+                Object.assign(file, {
+                    preview: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
+                    path: file.name
+                })
+            ) as FileWithPreview[];
+            setFiles((prev) => [...prev, ...newFiles]);
+        },
+        [files.length]
+    );
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        maxSize: MAX_FILE_SIZE,
+        maxSize: parseInt(process.env.MAX_FILE_SIZE!),
         accept: ACCEPTED_FILE_TYPES,
+        maxFiles: 10,
         onDropRejected: (fileRejections) => {
-            setError(fileRejections[0]?.errors[0]?.message || "File upload failed");
+            if (fileRejections[0]?.errors[0]?.code === "too-many-files") {
+                toast.error("Error", {
+                    description: "Maximum 10 files allowed"
+                });
+            } else {
+                toast.error("Error", {
+                    description: fileRejections[0]?.errors[0]?.message || "File upload failed"
+                });
+            }
         }
     });
 
@@ -38,10 +57,8 @@ export function useFileUpload() {
 
     const handleUpload = async () => {
         setIsUploading(true);
-        setUploadProgress(0);
 
         try {
-            const totalFiles = files.length;
             const updatedFiles: FileWithPreview[] = [];
 
             for (const file of files) {
@@ -57,14 +74,15 @@ export function useFileUpload() {
                     ...file,
                     fileUrl: result.fileUrl
                 });
-
-                setUploadProgress((prev) => prev + 100 / totalFiles);
             }
 
             setFiles(updatedFiles);
-            setUploadComplete(true); // trigger confetti
+            setUploadComplete(true);
+            toast.success("Upload successful!");
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Upload failed");
+            toast.error("Error", {
+                description: err instanceof Error ? err.message : "Upload failed"
+            });
         } finally {
             setIsUploading(false);
         }
@@ -72,9 +90,7 @@ export function useFileUpload() {
 
     return {
         files,
-        uploadProgress,
         isUploading,
-        error,
         uploadComplete,
         isDragActive,
         getRootProps,

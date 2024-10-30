@@ -40,7 +40,7 @@ export const UploadZone = ({
         <div
             {...getRootProps()}
             className={cn(
-                "border-2 border-dashed rounded-lg p-8 text-center space-y-4 transition-colors",
+                "border-2 border-dashed rounded-lg p-8 text-center space-y-4 transition-colors cursor-pointer dark:hover:bg-secondary/10 hover:bg-secondary/50 duration-200 ease-in-out h-96 flex items-center justify-center",
                 isDragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25",
                 isUploading && "pointer-events-none opacity-60"
             )}
@@ -57,10 +57,12 @@ export const UploadZone = ({
                         <Cloud className="h-10 w-10 text-muted-foreground" />
                     )}
                 </motion.div>
-                <p className="text-muted-foreground">
-                    Drop your files here or <span className="text-primary">browse</span>
+                <p className="mt-2 text-sm text-muted-foreground">
+                    Drag &apos;n&apos; drop files here, or click to select files
                 </p>
-                <p className="text-sm text-muted-foreground">Maximum file size: 50MB</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                    Max {process.env.MAX_FILES} files, up to {process.env.MAX_FILE_SIZE}MB each
+                </p>
             </div>
         </div>
     );
